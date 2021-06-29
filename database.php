@@ -18,7 +18,7 @@ class DB
     }
 
     //Funciones especiales para las consultas
-    public function registro($sql)
+    public function row($sql)
     {
         $resultado = $this->db->prepare($sql);
         if ($resultado->execute()) {
@@ -33,7 +33,7 @@ class DB
         }
     }
 
-    public function arreglo($sql)
+    public function array($sql)
     {
         $resultados = $this->db->prepare($sql);
         if ($resultados->execute()) {
