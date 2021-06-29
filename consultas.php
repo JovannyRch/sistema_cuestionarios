@@ -57,6 +57,36 @@ class Consultas
         return $this->db->query("UPDATE cuestionario set nom_cuestionario = '$nom_cuestionario', id_categoria = $id_categoria where id_cuestionario = $id_cuestionario");
     }
 
+    public function getPreguntas(){
+        return $this->db->array("SELECT * from pregunta");
+    }
+
+    public function getPregunta($id_pregunta){
+        return $this->db->row("SELECT * from pregunta where id_pregunta = $id_pregunta");
+    }
+
+    public function crearPregunta($pregunta, $a, $b, $c, $d, $e, $correcta){
+        return $this->db->query("INSERT INTO pregunta(pregunta, respA, respB, respC, respD, respE, respCorrecta)
+            values('$pregunta', '$a', '$b', '$c', '$d', '$e', '$correcta')
+        ");
+    }
+
+    public function updatePregunta($id_pregunta, $pregunta, $a, $b, $c, $d, $e, $correcta){
+        return $this->db->query("UPDATE pregunta 
+        set pregunta = '$pregunta', 
+        respA = '$a', 
+        respB = '$b', 
+        respC = '$c', 
+        respD = '$d', 
+        respE = '$e', 
+        respCorrecta = '$correcta' 
+        where id_pregunta = $id_pregunta
+        ");
+    }
+
+    public function deletePregunta($id_pregunta){
+        return $this->db->query("DELETE FROM pregunta WHERE id_pregunta = $id_pregunta");
+    }
 }
 
 

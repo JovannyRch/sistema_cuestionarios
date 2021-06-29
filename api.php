@@ -44,7 +44,43 @@ try {
           $data = $consultas->getCategorias();
           response($data);
           break;
-      
+      case "getPreguntas":
+        $data = $consultas->getPreguntas();
+        response($data);
+        break;
+      case "getPregunta":
+        $id_pregunta = getParam("id_pregunta");
+        $pregunta = $consultas->getPregunta($id_pregunta);
+        response($pregunta);
+        break;
+      case "crearPregunta":
+        $pregunta = getParam("pregunta");
+        $respA = getParam("respA");
+        $respB = getParam("respB");
+        $respC = getParam("respC");
+        $respD = getParam("respD");
+        $respE = getParam("respE");
+        $respCorrecta = getParam("respCorrecta");
+        $consultas->crearPregunta($pregunta,$respA, $respB, $respC, $respD, $respE, $respCorrecta);
+        responseSuccess("Creado con exito");
+        break;
+      case "updatePregunta":
+          $id_pregunta = getParam("id_pregunta");
+          $pregunta = getParam("pregunta");
+          $respA = getParam("respA");
+          $respB = getParam("respB");
+          $respC = getParam("respC");
+          $respD = getParam("respD");
+          $respE = getParam("respE");
+          $respCorrecta = getParam("respCorrecta");
+          $consultas->updatePregunta($id_pregunta, $pregunta,$respA, $respB, $respC, $respD, $respE, $respCorrecta);
+          responseSuccess("Creado con exito");
+          break;
+      case 'deletePregunta':
+            $id_pregunta = getParam("id_pregunta");
+            $consultas->deletePregunta($id_pregunta);
+            responseSuccess("Eliminado con exito");
+            break;
       default:
         responseError('Servicio no encontrado:'.$servicio);
         break;
