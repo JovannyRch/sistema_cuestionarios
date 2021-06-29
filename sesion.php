@@ -2,22 +2,13 @@
 
 session_start();
 
-function validarUsuarioNormal(){
+function validarTipoUsuario($tipo){
   validarSesion();
-  $isValid = $_SESSION["user"]["tipo"] == "normal";
+  $isValid = $_SESSION["user"]["tipo"] == $tipo;
   if(!$isValid){
     header("Location: login.php");
   }
 }
-
-function validarUsuarioAdmin(){
-  validarSesion();
-  $isValid = $_SESSION["user"]["tipo"] == "admin";
-  if(!$isValid){
-    header("Location: login.php");
-  }
-}
-
 
 function validarSesion(){
   $isSessionActive = isset($_SESSION["user"]);

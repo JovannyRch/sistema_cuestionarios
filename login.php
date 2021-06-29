@@ -19,7 +19,11 @@ if (isset($_POST["email"]) && $_POST["password"]) {
       $_SESSION['user'] = $usuario;
       if($usuario["tipo"]  == "admin"){
         header("Location: index_admin.php");
-      }else{
+      }
+      else if($usuario["tipo"] == "profesor"){
+        header("Location: index_profesor.php");
+      }
+      else{
         header("Location: index.php");
       }
     } else {

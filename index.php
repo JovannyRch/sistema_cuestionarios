@@ -4,8 +4,7 @@ include './consultas.php';
 include './helpers.php';
 include './sesion.php';
 
-validarUsuarioNormal();
-
+validarTipoUsuario("normal");
 
 ?>
 
