@@ -96,6 +96,12 @@ try {
         $resultados = $consultas->resultadoCuestionarioAlumno($id_alumno, $id_cuestionario);
         response($resultados);
         break;
+      //Cuestionario_preguntas
+      case "getPreguntasCuestionario":
+        $id_cuestionario = getParam("id_cuestionario");
+        $preguntas = $consultas->getPreguntasCuestionario($id_cuestionario);
+        response($preguntas);
+        break;
       default:
         responseError('Servicio no encontrado:'.$servicio)
         ;

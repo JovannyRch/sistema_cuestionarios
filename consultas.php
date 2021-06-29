@@ -114,6 +114,13 @@ class Consultas
 
         return $preguntas;
     }
+
+    public function getPreguntasCuestionario($id_cuestionario){
+        $preguntas = $this->db->array("SELECT * from pregunta where id_pregunta 
+        in (select id_pregunta from cuest_pregunta where id_cuestionario = $id_cuestionario)");
+
+        return $preguntas;
+    }
 }
 
 /*

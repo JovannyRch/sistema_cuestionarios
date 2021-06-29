@@ -36,6 +36,12 @@ if(isset($_GET["id_cuestionario"])){
     <button @click="guardar" class="btn btn-success mt-3"> 
       {{ edit? "Guardar cambios": "Agregar"}}
     </button>
+
+    <a :href="`cuestionario_pregunta_lista.php?id_cuestionario=${cuestionario.id_cuestionario}`" type="button" class="btn btn-primary mt-3">Ver Preguntas</a>
+
+    <a href="cuestionario_lista.php" type="button" class="btn btn-danger mt-3">Cancelar</a>
+
+    
   </div>
   <script>
   
@@ -72,13 +78,20 @@ if(isset($_GET["id_cuestionario"])){
                 nom_cuestionario: this.cuestionario.nom_cuestionario,
                 id_categoria: this.cuestionario.id_categoria,
               }, () => {
+                
                 toastr.success("Cuestionario actualizado exitosamente");
+                
               })
             }else{
               api("crearCuestionario", this.cuestionario, () => {
               toastr.success("Cuestionario creado exitosamente");
+              
             })
             }
+            setTimeout(() => {
+              window.location.href="cuestionario_lista.php";  
+              
+            }, 2000);
           }else{
             toastr.error("Complete todos los campos");
           }
