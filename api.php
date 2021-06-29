@@ -81,8 +81,24 @@ try {
             $consultas->deletePregunta($id_pregunta);
             responseSuccess("Eliminado con exito");
             break;
+      case "getAlumnos":
+        $alumnos = $consultas->getAlumnos();
+        response($alumnos);
+        break;
+      case "getCuestionariosAlumno":
+        $id_alumno = getParam("id_alumno");
+        $cuestionarios = $consultas->getCuestionariosPorAlumno($id_alumno);
+        response($cuestionarios);
+        break;
+      case "resultados_alumno_x_cuestionario":
+        $id_alumno = getParam("id_alumno");
+        $id_cuestionario = getParam("id_cuestionario");
+        $resultados = $consultas->resultadoCuestionarioAlumno($id_alumno, $id_cuestionario);
+        response($resultados);
+        break;
       default:
-        responseError('Servicio no encontrado:'.$servicio);
+        responseError('Servicio no encontrado:'.$servicio)
+        ;
         break;
     }
 } catch (\Throwable $th) {

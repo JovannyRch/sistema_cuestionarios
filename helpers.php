@@ -54,6 +54,7 @@
   $admin_nav_items = array(
     array( "title" => "Cuestionarios", "href" => "cuestionario_lista.php"),
     array( "title" => "Preguntas", "href" => "preguntas_lista.php"),
+    array( "title" => "Resultados", "href" => "resultados.php"),
   );
 
   

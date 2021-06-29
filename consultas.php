@@ -87,7 +87,40 @@ class Consultas
     public function deletePregunta($id_pregunta){
         return $this->db->query("DELETE FROM pregunta WHERE id_pregunta = $id_pregunta");
     }
+
+    public function getAlumnos(){
+        return $this->db->array("SELECT * from persona");
+    }
+
+    public function getCuestionariosPorAlumno($id_alumno){
+        return $this->db->array("SELECT cuestionario.*, categoria.nom_categoria from cuestionario natural join categoria
+        where cuestionario.id_cuestionario in (SELECT id_cuestionario from insertar_persona_cuestionario where id_persona = $id_alumno)");
+    }
+
+    public function resultadoCuestionarioAlumno($id_alumno, $id_cuestionario){
+        $preguntas = $this->db->array("SELECT * from pregunta where id_pregunta 
+        in (select id_pregunta from cuest_pregunta where id_cuestionario = $id_cuestionario)");
+
+        $id_ins_per_cuest = $this->db->row("SELECT id_ins_per_cuest from insertar_persona_cuestionario 
+        where id_persona = $id_alumno and id_cuestionario = $id_cuestionario")["id_ins_per_cuest"];
+
+        foreach($preguntas as &$pregunta){
+            $id_pregunta = $pregunta["id_pregunta"];
+            $id_cuest_pregunta = $this->db->row("SELECT id_cuest_pregunta from cuest_pregunta 
+            where id_pregunta = $id_pregunta and id_cuestionario = $id_cuestionario")["id_cuest_pregunta"];
+            $resultado = $this->db->row("SELECT respuesta, valor from respuestas_per_cuest where id_cuest_pregunta = $id_cuest_pregunta and id_ins_per_cuest = $id_ins_per_cuest");
+            $pregunta["resultado"] = $resultado;
+        }        
+
+        return $preguntas;
+    }
 }
+
+/*
+SELECT id_ins_per_cuest from insertar_persona_cuestionario 
+        where id_persona = 2 and id_cuestionario = 4;
+
+*/
 
 
 
