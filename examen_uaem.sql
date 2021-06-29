@@ -17,9 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Base de datos: `examen_uaem`
---
+
 
 -- --------------------------------------------------------
 
@@ -28,7 +26,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `admin` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL primary key auto_increment,
   `passw` varchar(20) NOT NULL,
   `correo` varchar(50) NOT NULL,
   `nombre` varchar(50) NOT NULL,
@@ -50,7 +48,7 @@ INSERT INTO `admin` (`id`, `passw`, `correo`, `nombre`, `ape_paterno`, `ape_mate
 --
 
 CREATE TABLE `categoria` (
-  `id_categoria` int(11) NOT NULL,
+  `id_categoria` int(11) NOT NULL primary key auto_increment,
   `nom_categoria` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -71,7 +69,7 @@ INSERT INTO `categoria` (`id_categoria`, `nom_categoria`) VALUES
 --
 
 CREATE TABLE `cuestionario` (
-  `id_cuestionario` int(11) NOT NULL,
+  `id_cuestionario` int(11) NOT NULL primary key auto_increment,
   `nom_cuestionario` varchar(100) NOT NULL,
   `fec_elaboracion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `id_categoria` int(11) NOT NULL
@@ -94,7 +92,7 @@ INSERT INTO `cuestionario` (`id_cuestionario`, `nom_cuestionario`, `fec_elaborac
 --
 
 CREATE TABLE `cuest_pregunta` (
-  `id_cuest_pregunta` int(11) NOT NULL,
+  `id_cuest_pregunta` int(11) NOT NULL primary key auto_increment,
   `id_cuestionario` int(11) NOT NULL,
   `id_pregunta` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -127,7 +125,7 @@ INSERT INTO `cuest_pregunta` (`id_cuest_pregunta`, `id_cuestionario`, `id_pregun
 --
 
 CREATE TABLE `insertar_persona_cuestionario` (
-  `id_ins_per_cuest` int(11) NOT NULL,
+  `id_ins_per_cuest` int(11) NOT NULL primary key auto_increment,
   `id_persona` int(11) NOT NULL,
   `id_cuestionario` int(11) NOT NULL,
   `fec_inscrip` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
@@ -158,7 +156,7 @@ INSERT INTO `insertar_persona_cuestionario` (`id_ins_per_cuest`, `id_persona`, `
 --
 
 CREATE TABLE `persona` (
-  `id_persona` int(11) NOT NULL,
+  `id_persona` int(11) NOT NULL primary key auto_increment,
   `nom_persona` varchar(50) NOT NULL,
   `app_persona` varchar(50) NOT NULL,
   `apm_persona` varchar(50) NOT NULL,
@@ -185,7 +183,7 @@ INSERT INTO `persona` (`id_persona`, `nom_persona`, `app_persona`, `apm_persona`
 --
 
 CREATE TABLE `pregunta` (
-  `id_pregunta` int(11) NOT NULL,
+  `id_pregunta` int(11) NOT NULL primary key auto_increment,
   `pregunta` varchar(1000) NOT NULL,
   `respA` varchar(1000) NOT NULL,
   `respB` varchar(1000) NOT NULL,
@@ -228,7 +226,7 @@ INSERT INTO `pregunta` (`id_pregunta`, `pregunta`, `respA`, `respB`, `respC`, `r
 --
 
 CREATE TABLE `profesor` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL primary key auto_increment,
   `pass` varchar(50) NOT NULL,
   `correo` varchar(50) NOT NULL,
   `nombre` varchar(50) NOT NULL,
@@ -243,7 +241,7 @@ CREATE TABLE `profesor` (
 --
 
 CREATE TABLE `respuestas_per_cuest` (
-  `id_respu_per_cuest` int(11) NOT NULL,
+  `id_respu_per_cuest` int(11) NOT NULL primary key auto_increment,
   `id_ins_per_cuest` int(11) NOT NULL,
   `id_cuest_pregunta` int(11) NOT NULL,
   `respuesta` varchar(10) NOT NULL,
@@ -315,24 +313,12 @@ INSERT INTO `respuestas_per_cuest` (`id_respu_per_cuest`, `id_ins_per_cuest`, `i
 -- Índices para tablas volcadas
 --
 
---
--- Indices de la tabla `categoria`
---
-ALTER TABLE `categoria`
-  ADD PRIMARY KEY (`id_categoria`);
 
---
--- Indices de la tabla `cuestionario`
---
-ALTER TABLE `cuestionario`
-  ADD PRIMARY KEY (`id_cuestionario`),
-  ADD KEY `id_categoria` (`id_categoria`);
 
 --
 -- Indices de la tabla `cuest_pregunta`
 --
 ALTER TABLE `cuest_pregunta`
-  ADD PRIMARY KEY (`id_cuest_pregunta`),
   ADD KEY `id_cuestionario` (`id_cuestionario`),
   ADD KEY `id_pregunta` (`id_pregunta`);
 
@@ -340,27 +326,15 @@ ALTER TABLE `cuest_pregunta`
 -- Indices de la tabla `insertar_persona_cuestionario`
 --
 ALTER TABLE `insertar_persona_cuestionario`
-  ADD PRIMARY KEY (`id_ins_per_cuest`),
   ADD KEY `id_persona` (`id_persona`),
   ADD KEY `id_cuestionario_insertar` (`id_cuestionario`);
 
---
--- Indices de la tabla `persona`
---
-ALTER TABLE `persona`
-  ADD PRIMARY KEY (`id_persona`);
 
---
--- Indices de la tabla `pregunta`
---
-ALTER TABLE `pregunta`
-  ADD PRIMARY KEY (`id_pregunta`);
 
 --
 -- Indices de la tabla `respuestas_per_cuest`
 --
 ALTER TABLE `respuestas_per_cuest`
-  ADD PRIMARY KEY (`id_respu_per_cuest`),
   ADD KEY `id_ins_per_cuest` (`id_ins_per_cuest`),
   ADD KEY `id_cuest_pregunta` (`id_cuest_pregunta`);
 
@@ -372,28 +346,28 @@ ALTER TABLE `respuestas_per_cuest`
 -- Filtros para la tabla `cuestionario`
 --
 ALTER TABLE `cuestionario`
-  ADD CONSTRAINT `id_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `id_categoria` FOREIGN KEY (`id_categoria`) REFERENCES `categoria` (`id_categoria`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `cuest_pregunta`
 --
 ALTER TABLE `cuest_pregunta`
-  ADD CONSTRAINT `id_cuestionario` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionario` (`id_cuestionario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `id_pregunta` FOREIGN KEY (`id_pregunta`) REFERENCES `pregunta` (`id_pregunta`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `id_cuestionario` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionario` (`id_cuestionario`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `id_pregunta` FOREIGN KEY (`id_pregunta`) REFERENCES `pregunta` (`id_pregunta`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `insertar_persona_cuestionario`
 --
 ALTER TABLE `insertar_persona_cuestionario`
-  ADD CONSTRAINT `id_cuestionario_insertar` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionario` (`id_cuestionario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `id_persona` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `id_cuestionario_insertar` FOREIGN KEY (`id_cuestionario`) REFERENCES `cuestionario` (`id_cuestionario`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `id_persona` FOREIGN KEY (`id_persona`) REFERENCES `persona` (`id_persona`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `respuestas_per_cuest`
 --
 ALTER TABLE `respuestas_per_cuest`
-  ADD CONSTRAINT `id_cuest_pregunta` FOREIGN KEY (`id_cuest_pregunta`) REFERENCES `cuest_pregunta` (`id_cuest_pregunta`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `id_ins_per_cuest` FOREIGN KEY (`id_ins_per_cuest`) REFERENCES `insertar_persona_cuestionario` (`id_ins_per_cuest`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `id_cuest_pregunta` FOREIGN KEY (`id_cuest_pregunta`) REFERENCES `cuest_pregunta` (`id_cuest_pregunta`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `id_ins_per_cuest` FOREIGN KEY (`id_ins_per_cuest`) REFERENCES `insertar_persona_cuestionario` (`id_ins_per_cuest`) ON DELETE CASCADE ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

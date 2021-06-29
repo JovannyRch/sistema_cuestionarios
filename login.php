@@ -18,7 +18,7 @@ if (isset($_POST["email"]) && $_POST["password"]) {
     if (isset($usuario)) {
       $_SESSION['user'] = $usuario;
       if($usuario["tipo"]  == "admin"){
-        header("Location: index_admin.php");
+        header("Location: cuestionario_lista.php");
       }
       else if($usuario["tipo"] == "profesor"){
         header("Location: index_profesor.php");

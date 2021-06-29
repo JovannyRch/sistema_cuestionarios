@@ -32,4 +32,55 @@ class Consultas
         return null;
     }
 
+    public function getCuestionarios(){
+        $cuestionarios = $this->db->array("SELECT cuestionario.*, categoria.nom_categoria from cuestionario natural join categoria");
+        return $cuestionarios;
+    }
+
+    public function eliminarCuestionario($id_cuestionario){
+        return $this->db->query("DELETE FROM cuestionario WHERE id_cuestionario = $id_cuestionario");
+    }
+
+    public function getCategorias(){
+        return $this->db->array("SELECT * from categoria");
+    }
+
+    public function crearCuestionario($nom_cuestionario, $id_categoria){
+        return $this->db->query("INSERT INTO cuestionario (nom_cuestionario, id_categoria) value('$nom_cuestionario', '$id_categoria')");
+    }
+
+    public function getCuestionario($id_cuestionario){
+        return $this->db->row("SELECT cuestionario.*, categoria.nom_categoria from cuestionario natural join categoria where cuestionario.id_cuestionario = $id_cuestionario");
+    }
+
+    public function updateCuestionario($id_cuestionario, $nom_cuestionario, $id_categoria){
+        return $this->db->query("UPDATE cuestionario set nom_cuestionario = '$nom_cuestionario', id_categoria = $id_categoria where id_cuestionario = $id_cuestionario");
+    }
+
+}
+
+
+
+function response($data)
+{
+    echo json_encode($data);
+}
+
+
+function responseError($message)
+{
+    response(array('success' => 0, 'error' => $message));
+}
+
+function responseSuccess($message)
+{
+    response(array('success' => 1, 'msg' => $message));
+}
+
+function getParam($name){
+  if (isset($_POST[$name])) {
+    return $_POST[$name];
+  }else{
+    return null;
+  }
 }
