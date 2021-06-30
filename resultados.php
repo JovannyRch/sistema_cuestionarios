@@ -26,7 +26,7 @@ validarTipoUsuario('admin');
       <div class="form-group w-50 mt-3">
         <label for="cuestionario">Cuestionario</label>
         <select @change="fetchResultados" v-model="cuestionario" class="custom-select" name="cuestionario" id="cuestionario">
-          <option selected :value="null">Seleeciona un cuestionario</option>
+          <option selected :value="null">Selecciona un cuestionario</option>
           <option v-for="cuestionario in cuestionarios" :value="cuestionario">
             {{cuestionario.nom_cuestionario}}
           </option>
