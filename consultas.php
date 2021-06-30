@@ -109,8 +109,11 @@ class Consultas
         $preguntas = $this->db->array("SELECT * from pregunta where id_pregunta 
         in (select id_pregunta from cuest_pregunta where id_cuestionario = $id_cuestionario)");
 
-        $id_ins_per_cuest = $this->db->row("SELECT id_ins_per_cuest from insertar_persona_cuestionario 
-        where id_persona = $id_alumno and id_cuestionario = $id_cuestionario")["id_ins_per_cuest"];
+        $cuestionario_inscrito = $this->db->row("SELECT * from insertar_persona_cuestionario 
+        where id_persona = $id_alumno and id_cuestionario = $id_cuestionario");
+
+        $id_ins_per_cuest = $cuestionario_inscrito["id_ins_per_cuest"];
+        $calificacion = $cuestionario_inscrito["cal_cuestionario"];
 
         foreach($preguntas as &$pregunta){
             $id_pregunta = $pregunta["id_pregunta"];
@@ -120,7 +123,10 @@ class Consultas
             $pregunta["resultado"] = $resultado;
         }        
 
-        return $preguntas;
+        return array(
+            "preguntas"=> $preguntas,
+            "calificacion"=> $calificacion
+        );
     }
 
     public function getPreguntasCuestionario($id_cuestionario){

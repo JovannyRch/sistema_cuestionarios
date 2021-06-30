@@ -15,7 +15,7 @@ validarTipoUsuario('admin');
     <div class="d-flex flex-column mt-4">
       <div class="form-group w-50">
         <label for="alumno">Alumno</label>
-        <select @change="fetchCuestionariosPoAlumno" v-model="alumno" class="form-control" name="alumno" id="alumno">
+        <select @change="fetchCuestionariosPorAlumno" v-model="alumno" class="form-control" name="alumno" id="alumno">
           <option selected :value="null">Seleeciona un alumno</option>
           <option v-for="alumno in alumnos" :value="alumno">
             {{alumno.nom_persona}}
@@ -35,31 +35,38 @@ validarTipoUsuario('admin');
     </div>
     <div class="mt-4" v-if="resultadosObtenidos">
         <h5><b>{{alumno.nom_persona}}</b> - <i><b>{{cuestionario.nom_cuestionario}}</b></i></h5>
-        <div class="mb-2 mt-2">
-          Total preguntas: {{preguntas.length}}
+        <div v-if="calificacion == -1">
+            <div class="alert alert-warning text-center" role="alert">
+              <strong>El alumno no ha conestado el cuestionario</strong>
+            </div>
         </div>
-        <div class="card mb-2" v-for="(pregunta, index) in preguntas">
-          <div class="card-body d-flex">
-             <div style="width: 95%">
-              <div>{{index+1}}.- {{pregunta.pregunta}}</div>
-              
-             </div>
-             <div style="width: 5%">
-              
-                <div v-if="esRespuestaCorrecta(pregunta, pregunta.resultado.respuesta)" class="alert alert-success text-center" role="alert">
-                  <i  class="fa fa-check" aria-hidden="true"></i>
-                </div>
-                <div v-else class="alert alert-danger text-center" role="alert">
-                  <i class="fa fa-times-circle" aria-hidden="true"></i>
-                </div>
-                <div class="text-center">
-                  <b>{{pregunta.resultado.valor}}</b>
-                </div>
-             </div>
+        <div v-else>
+          <div class="mb-2 mt-2">
+            Total preguntas: {{preguntas.length}}
           </div>
-        </div>
-        <div class="d-flex justify-content-end" style="font-size: 20px;"> 
-            <i>Resultado: </i> <b >{{obtenerPuntaje(preguntas)}}</b>
+          <div class="card mb-2" v-for="(pregunta, index) in preguntas">
+            <div class="card-body d-flex">
+               <div style="width: 95%">
+                <div>{{index+1}}.- {{pregunta.pregunta}}</div>
+                
+               </div>
+               <div style="width: 5%">
+                
+                  <div v-if="esRespuestaCorrecta(pregunta, pregunta.resultado?.respuesta)" class="alert alert-success text-center" role="alert">
+                    <i  class="fa fa-check" aria-hidden="true"></i>
+                  </div>
+                  <div v-else class="alert alert-danger text-center" role="alert">
+                    <i class="fa fa-times-circle" aria-hidden="true"></i>
+                  </div>
+                  <div class="text-center">
+                    <b>{{pregunta.resultado.valor}}</b>
+                  </div>
+               </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end" style="font-size: 20px;"> 
+              <i>Resultado: </i> <b >{{calificacion}}</b>
+          </div>
         </div>
     </div>
   </div>
@@ -74,6 +81,7 @@ validarTipoUsuario('admin');
         alumno: null,
         resultadosObtenidos: false,
         preguntas: [],
+        calificacion: null,
       },
       created: function(){
         this.fetchAlumnos();
@@ -130,7 +138,10 @@ validarTipoUsuario('admin');
             this.alumnos = data;
           });
         },
-        fetchCuestionariosPoAlumno(){
+        fetchCuestionariosPorAlumno(){
+          this.cuestionario = null;
+          this.cuestionarios = [];
+          this.resultadosObtenidos = false;
           if(this.alumno !== null){
             const data = {
               id_alumno: this.alumno.id_persona
@@ -145,12 +156,14 @@ validarTipoUsuario('admin');
           }
         },
         fetchResultados(){
+          this.resultadosObtenidos = false;
           const data = {
             id_alumno: this.alumno.id_persona,
             id_cuestionario: this.cuestionario.id_cuestionario,
           };
           api("resultados_alumno_x_cuestionario", data, (data) => {
-            this.preguntas = data;
+            this.preguntas = data.preguntas.filter((p) => p.resultado !== null);
+            this.calificacion = data.calificacion;
             this.resultadosObtenidos = true;
           })
         }
