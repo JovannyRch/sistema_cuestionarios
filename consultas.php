@@ -89,9 +89,6 @@ class Consultas
     }
 
     public function getAlumnos(){
-        $query = "SELECT * from persona";
-        echo $query;
-        die();
         return $this->db->array("SELECT * from persona");
     }
 
