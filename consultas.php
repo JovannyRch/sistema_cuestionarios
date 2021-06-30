@@ -197,6 +197,100 @@ class Consultas
         return $this->db->query("INSERT INTO insertar_persona_cuestionario (id_persona, id_cuestionario, cal_cuestionario) values( '$id_persona', '$id_cuestionario', '$calificacion')
         ");
     }
+
+
+    public function getReporteCuestionario($id_cuestionario, $inicio, $fin){
+       
+        
+        $promedio = $this->db->row("SELECT avg(cal_cuestionario) as promedio
+        FROM insertar_persona_cuestionario
+        WHERE fec_inscrip >= CAST('$inicio' AS DATE)
+        AND fec_inscrip <= CAST('$fin' AS DATE) 
+        and cal_cuestionario > -1 
+        and id_cuestionario = $id_cuestionario")["promedio"];
+        
+        
+        $filtro_cuestionarios = "SELECT id_ins_per_cuest
+        FROM insertar_persona_cuestionario
+        WHERE fec_inscrip >= CAST('$inicio' AS DATE)
+        AND fec_inscrip <= CAST('$fin' AS DATE) 
+        and cal_cuestionario > -1 
+        and id_cuestionario = $id_cuestionario";
+
+        $preguntas = $this->db->array("SELECT * from pregunta natural join cuest_pregunta where id_cuestionario = $id_cuestionario");
+        
+        foreach ($preguntas as &$pregunta) {
+            $id_cuest_pregunta = $pregunta["id_cuest_pregunta"];
+            $pregunta["respuestas"] = $this->db->array("SELECT respuesta, valor from respuestas_per_cuest
+                where id_cuest_pregunta = $id_cuest_pregunta and id_cuest_pregunta in ($filtro_cuestionarios)
+            ");
+        }
+
+        
+        $reporte = array(
+            "promedio" => $promedio,
+            "preguntas" => $preguntas
+        );
+        return $reporte;
+    }
+
+    public function getCuestionariosConPregunta($id_pregunta){
+        $data = $this->db->array("SELECT * from cuestionario where id_cuestionario in 
+        (SELECT id_cuestionario from cuest_pregunta where id_pregunta = $id_pregunta )");
+        return $data;
+    }
+
+    public function totalAciertos($respuestas){
+        $total = 0;
+        foreach ($respuestas as $r) {
+            if( intval($r["valor"]) != 0){
+                $total++;
+            }
+        }
+        return $total;
+    }
+
+    public function getPromedio($respuestas){
+        $totalAciertos = $this->totalAciertos($respuestas);
+        $total = sizeof($respuestas);
+        if($total == 0){
+            return "--";
+        }
+        return round(($totalAciertos/$total)*10, 2);
+    }
+
+   
+
+    public function getReportePregunta($id_pregunta, $id_cuestionario){
+        $preguntas = array();
+        $queryPreguntas = "";
+        
+        if(isset($id_pregunta)){
+            if(isset($id_cuestionario)){
+                $queryPreguntas = "SELECT * from pregunta natural join cuest_pregunta 
+                where id_cuestionario = $id_cuestionario 
+                and id_pregunta = $id_pregunta";
+            }
+            else{
+                $queryPreguntas = "SELECT * from pregunta natural join cuest_pregunta where id_pregunta = $id_pregunta";
+            }
+        }else{
+            if(isset($id_cuestionario)){
+                $queryPreguntas = "SELECT * from pregunta natural join cuest_pregunta where id_cuestionario = $id_cuestionario";
+            }
+            else{
+                $queryPreguntas = "SELECT * from pregunta natural join cuest_pregunta";
+            }
+        }
+        $preguntas = $this->db->array($queryPreguntas);
+
+        foreach ($preguntas as &$pregunta ) {
+            $id_cuest_pregunta = $pregunta["id_cuest_pregunta"];
+            $pregunta["respuestas"] = $this->db->array("SELECT respuesta, valor from respuestas_per_cuest where id_cuest_pregunta = $id_cuest_pregunta");
+        }
+
+        return $preguntas;
+    }
 }
 
 

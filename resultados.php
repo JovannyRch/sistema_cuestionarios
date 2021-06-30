@@ -15,7 +15,7 @@ validarTipoUsuario('admin');
     <div class="d-flex flex-column mt-4">
       <div class="form-group w-50">
         <label for="alumno">Alumno</label>
-        <select @change="fetchCuestionariosPoAlumno" v-model="alumno" class="custom-select" name="alumno" id="alumno">
+        <select @change="fetchCuestionariosPoAlumno" v-model="alumno" class="form-control" name="alumno" id="alumno">
           <option selected :value="null">Seleeciona un alumno</option>
           <option v-for="alumno in alumnos" :value="alumno">
             {{alumno.nom_persona}}
@@ -25,7 +25,7 @@ validarTipoUsuario('admin');
 
       <div class="form-group w-50 mt-3">
         <label for="cuestionario">Cuestionario</label>
-        <select @change="fetchResultados" v-model="cuestionario" class="custom-select" name="cuestionario" id="cuestionario">
+        <select @change="fetchResultados" v-model="cuestionario" class="form-control" name="cuestionario" id="cuestionario">
           <option selected :value="null">Selecciona un cuestionario</option>
           <option v-for="cuestionario in cuestionarios" :value="cuestionario">
             {{cuestionario.nom_cuestionario}}

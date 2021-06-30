@@ -164,6 +164,26 @@ try {
         $consultas->addAlumnoCuestionario($id_persona, $id_cuestionario, $calificacion);
         responseSuccess("Agregado con exito");
         break;
+      case "reporteCuestionario":
+        $id_cuestionario = getParam("id_cuestionario");
+        $inicio = getParam("inicio");
+        $fin = getParam("fin");
+        $data = $consultas->getReporteCuestionario($id_cuestionario, $inicio, $fin);
+        response($data);
+        break;
+      case "getCuestionariosConPregunta":
+        $id_pregunta = getParam("id_pregunta");
+        $data = $consultas->getCuestionariosConPregunta($id_pregunta);
+        response($data);
+        break;
+      case "getReportePregunta":
+        $id_pregunta = getParam("id_pregunta");
+        $id_pregunta = $id_pregunta == ""? null: $id_pregunta;
+        $id_cuestionario = getParam("id_cuestionario");
+        $id_cuestionario = $id_cuestionario == ""? null: $id_cuestionario;
+        $data = $consultas->getReportePregunta($id_pregunta, $id_cuestionario);
+        response($data);
+        break;
       default:
         responseError('Servicio no encontrado:'.$servicio)
         ;

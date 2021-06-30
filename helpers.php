@@ -56,6 +56,7 @@
     array( "title" => "Preguntas", "href" => "preguntas_lista.php"),
     array( "title" => "Inscripción alumnos", "href" => "inscripcion_alumnos.php"),
     array( "title" => "Resultados", "href" => "resultados.php"),
+    array( "title" => "Reportes", "href" => "reportes.php"),
   );
 
   
