@@ -46,7 +46,7 @@ class Consultas
     }
 
     public function crearCuestionario($nom_cuestionario, $id_categoria){
-        return $this->db->query("INSERT INTO cuestionario (nom_cuestionario, id_categoria) value('$nom_cuestionario', '$id_categoria')");
+        return $this->db->query("INSERT INTO cuestionario (nom_cuestionario, id_categoria) values('$nom_cuestionario', '$id_categoria')");
     }
 
     public function getCuestionario($id_cuestionario){
@@ -168,7 +168,7 @@ class Consultas
     }
 
     public function guardarRespuestas($respuestas){
-        foreach ($respuestas as $r ) {
+        foreach ($respuestas as $r) {
             $id_ins_per_cuest = $r["id_ins_per_cuest"];
             $id_cuest_pregunta = $r["id_cuest_pregunta"];
             $respuesta = $r["respuesta"];
@@ -179,13 +179,29 @@ class Consultas
             ");
         }
     }
+
+    public function getAlumnosInscritos($id_cuestionario){
+        $alumnos = $this->db->array("SELECT * from persona where id_persona
+        in (select id_persona from insertar_persona_cuestionario where id_cuestionario = $id_cuestionario)");
+
+        return $alumnos;
+    }
+    public function getAlumnosNoInscritos($id_cuestionario){
+        $alumnos = $this->db->array("SELECT * from persona where id_persona
+        NOT IN (select id_persona from insertar_persona_cuestionario where id_cuestionario = $id_cuestionario)");
+
+        return $alumnos;
+    }
+
+    public function deleteAlumnoCuestionario($id_persona, $id_cuestionario){
+        return $this->db->query("DELETE FROM insertar_persona_cuestionario WHERE id_persona = $id_persona AND id_cuestionario = $id_cuestionario");
+    }
+    public function addAlumnoCuestionario($id_persona, $id_cuestionario, $calificacion){
+        return $this->db->query("INSERT INTO insertar_persona_cuestionario (id_persona, id_cuestionario, cal_cuestionario) values( '$id_persona', '$id_cuestionario', '$calificacion')
+        ");
+    }
 }
 
-/*
-SELECT id_ins_per_cuest from insertar_persona_cuestionario 
-        where id_persona = 2 and id_cuestionario = 4;
-
-*/
 
 
 
