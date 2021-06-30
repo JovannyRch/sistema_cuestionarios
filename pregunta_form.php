@@ -111,6 +111,10 @@ if(isset($_GET["id_pregunta"])){
               toastr.success("Pregunta creado exitosamente");
             })
             }
+            setTimeout(() => {
+              window.location.href="preguntas_lista.php";  
+              
+            }, 2000);
           }else{
             toastr.error("Complete todos los campos");
           }

@@ -100,6 +100,28 @@ try {
         $id_alumno = getParam("id_alumno");
         $cuestionarios = $consultas->getCuestionariosPorAlumnoConEstatus($id_alumno);
         response($cuestionarios);
+      //Cuestionario_preguntas
+      case "getPreguntasCuestionario":
+        $id_cuestionario = getParam("id_cuestionario");
+        $preguntas = $consultas->getPreguntasCuestionario($id_cuestionario);
+        response($preguntas);
+        break;
+      case "getPreguntasDisponibles":
+        $id_cuestionario = getParam("id_cuestionario");
+        $preguntas = $consultas->getPreguntasDisponibles($id_cuestionario);
+        response($preguntas);
+        break;
+      case "deletePreguntaCuestionario":
+        $id_pregunta = getParam("id_pregunta");
+        $id_cuestionario = getParam("id_cuestionario");
+        $consultas->deletePreguntaCuestionario($id_pregunta, $id_cuestionario);
+        responseSuccess("Eliminado con exito");
+        break;
+      case "addPreguntaCuestionario":
+        $id_pregunta = getParam("id_pregunta");
+        $id_cuestionario = getParam("id_cuestionario");
+        $consultas->addPreguntaCuestionario($id_pregunta, $id_cuestionario);
+        responseSuccess("Eliminado con exito");
         break;
       default:
         responseError('Servicio no encontrado:'.$servicio)

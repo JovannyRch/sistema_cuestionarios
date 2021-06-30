@@ -134,6 +134,29 @@ class Consultas
 
         return $preguntas;
     }
+
+    public function getPreguntasCuestionario($id_cuestionario){
+        $preguntas = $this->db->array("SELECT * from pregunta where id_pregunta 
+        in (select id_pregunta from cuest_pregunta where id_cuestionario = $id_cuestionario)");
+
+        return $preguntas;
+    }
+    public function getPreguntasDisponibles($id_cuestionario){
+        $preguntas = $this->db->array("SELECT * from pregunta where id_pregunta 
+        NOT IN (select id_pregunta from cuest_pregunta where id_cuestionario = $id_cuestionario)");
+
+        return $preguntas;
+    }
+
+    public function deletePreguntaCuestionario($id_pregunta, $id_cuestionario){
+        return $this->db->query("DELETE FROM cuest_pregunta WHERE id_pregunta = $id_pregunta AND id_cuestionario = $id_cuestionario");
+    }
+    public function addPreguntaCuestionario($id_pregunta, $id_cuestionario){
+        return $this->db->query("INSERT INTO cuest_pregunta(id_cuestionario, id_pregunta)
+            values($id_cuestionario, $id_pregunta)
+        ");
+
+    }
 }
 
 /*
