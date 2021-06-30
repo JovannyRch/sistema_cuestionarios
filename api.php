@@ -100,6 +100,7 @@ try {
         $id_alumno = getParam("id_alumno");
         $cuestionarios = $consultas->getCuestionariosPorAlumnoConEstatus($id_alumno);
         response($cuestionarios);
+        break;
       //Cuestionario_preguntas
       case "getPreguntasCuestionario":
         $id_cuestionario = getParam("id_cuestionario");
@@ -122,6 +123,23 @@ try {
         $id_cuestionario = getParam("id_cuestionario");
         $consultas->addPreguntaCuestionario($id_pregunta, $id_cuestionario);
         responseSuccess("Eliminado con exito");
+        break;
+      case "getCuestionarioAlumno":
+        $id_alumno = getParam("id_alumno");
+        $id_cuestionario = getParam("id_cuestionario");
+        $data = $consultas->getCuestionarioAlumno($id_alumno, $id_cuestionario);
+        response($data);
+        break;
+      case "guardarRespuestas":
+        $respuestas = getParam("respuestas");
+        $consultas->guardarRespuestas($respuestas);
+        responseSuccess("Respuestas guardadas");
+        break;
+      case "actualizarCalificacion":
+        $id_ins_per_cuest = getParam("id_ins_per_cuest");
+        $calificacion = getParam("calificacion");
+        $consultas->updateCalificacion($id_ins_per_cuest, $calificacion);
+        responseSuccess("Calificación actualizada");
         break;
       default:
         responseError('Servicio no encontrado:'.$servicio)

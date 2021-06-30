@@ -89,6 +89,9 @@ class Consultas
     }
 
     public function getAlumnos(){
+        $query = "SELECT * from persona";
+        echo $query;
+        die();
         return $this->db->array("SELECT * from persona");
     }
 
@@ -99,22 +102,10 @@ class Consultas
 
     public function getCuestionariosPorAlumnoConEstatus($id_alumno){
 
-        //TODO: @Fix: After
-        $inscripciones = $this->db->array("SELECT * from insertar_persona_cuestionario where id_persona = $id_alumno");
-        
-
-        foreach ($inscripciones as &$inscripcion) {
-            $id_cuestionario = $inscripcion["id_cuestionario"];
-            $id_ins_per_cuest = $inscripcion["id_ins_per_cuest"];
-            $cuestionario = $this->db->array("SELECT cuestionario.*, categoria.nom_categoria from cuestionario natural join categoria
-                 where cuestionario.id_cuestionario = $id_cuestionario");
-            $inscripcion['cuestionario'] = $cuestionario;
-            $count = $this->db->row("SELECT count(*) as total from respuestas_per_cuest where id_ins_per_cuest = $id_ins_per_cuest")["total"];
-            $inscripcion['total'] = intval($count);
-            
-        }
-
-        return $inscripciones;
+        $data = $this->db->array("SELECT * from (SELECT * from insertar_persona_cuestionario natural join cuestionario
+        where insertar_persona_cuestionario.id_persona = $id_alumno) as cues natural join categoria");
+     
+        return $data;
     }   
 
     public function resultadoCuestionarioAlumno($id_alumno, $id_cuestionario){
@@ -156,6 +147,37 @@ class Consultas
             values($id_cuestionario, $id_pregunta)
         ");
 
+    }
+
+    public function getCuestionarioAlumno($id_alumno, $id_cuestionario){
+        $data = $this->db->row("SELECT * from insertar_persona_cuestionario  
+        natural join cuestionario 
+        where id_persona = $id_alumno
+        and id_cuestionario = $id_cuestionario
+        ");
+
+        $preguntas = $this->db->array("SELECT * from pregunta natural join cuest_pregunta
+            where id_cuestionario = $id_cuestionario
+        ");
+        $data["preguntas"] = $preguntas;
+        return $data;
+    }
+
+    public function updateCalificacion($id_ins_per_cuest, $calificacion){
+        return $this->db->query("UPDATE insertar_persona_cuestionario set cal_cuestionario = $calificacion where  id_ins_per_cuest = $id_ins_per_cuest");
+    }
+
+    public function guardarRespuestas($respuestas){
+        foreach ($respuestas as $r ) {
+            $id_ins_per_cuest = $r["id_ins_per_cuest"];
+            $id_cuest_pregunta = $r["id_cuest_pregunta"];
+            $respuesta = $r["respuesta"];
+            $valor = $r["valor"];
+            $this->db->query("INSERT into respuestas_per_cuest
+            (id_ins_per_cuest, id_cuest_pregunta, respuesta, valor)
+            values($id_ins_per_cuest, $id_cuest_pregunta, '$respuesta', $valor)
+            ");
+        }
     }
 }
 
