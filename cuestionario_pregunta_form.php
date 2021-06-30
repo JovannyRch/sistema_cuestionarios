@@ -23,42 +23,30 @@ if(isset($_GET["id_cuestionario"])){
       <thead>
         <tr>
           <th>Pregunta</th>
-          <th>A</th>
-          <th>B</th>
-          <th>C</th>
-          <th>D</th>
-          <th>E</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="pregunta in preguntas">
           <td>{{pregunta.pregunta}}</td>
-          <td>{{pregunta.respA}}</td>
-          <td>{{pregunta.respB}}</td>
-          <td>{{pregunta.respC}}</td>
-          <td>{{pregunta.respD}}</td>
-          <td>{{pregunta.respE}}</td>
+          
           <td>
-            <button type="button" class="btn btn-danger" @click="quitarPregunta(pregunta)">
-              <i class="fa fa-trash" aria-hidden="true"></i>
-              Quitar
+            <button type="button" class="btn btn-primary" @click="agregarPregunta(pregunta)">
+              <i class="fa fa-plus" aria-hidden="true"></i>
+              Agregar
             </button>
-            <a :href="`pregunta_form.php?id_pregunta=${pregunta.id_pregunta}`" type="button" class="btn btn-warning">
-              <i class="fas fa-pen"></i>
-              Editar
-            </a>
+            
           </td>
         </tr>
       </tbody>
     </table>
 
     <div class="alert alert-danger" role="alert" v-if="preguntas.length === 0">
-        El cuestionario no tiene preguntas asignadas
+        No hay preguntas nuevas para agregar a este cuestionario
     </div>
     
-    <a :href="`cuestionario_pregunta_form.php?id_cuestionario=${cuestionario.id_cuestionario}`" type="button" class="btn btn-primary mt-3">Agregar Preguntas</a>
-    <a href="cuestionario_lista.php" type="button" class="btn btn-danger mt-3">Volver</a>
+
+    <a :href="`cuestionario_pregunta_lista.php?id_cuestionario=${cuestionario.id_cuestionario}`" type="button" class="btn btn-danger mt-3">Cancelar</a>
 
     
   </div>
@@ -77,26 +65,26 @@ if(isset($_GET["id_cuestionario"])){
       created: function(){
         if(this.id_cuestionario){
           this.fetchCuestionario();
-          this.fetchPreguntasCuestionario();
+          this.fetchPreguntasDisponibles();
         }
       },
       methods: {
         fetchCuestionario(){
           api("getCuestionario", {id_cuestionario: this.id_cuestionario}, (data) => this.cuestionario = data);
         },
-        fetchPreguntasCuestionario(){
-            api("getPreguntasCuestionario",{id_cuestionario: this.id_cuestionario}, 
+        fetchPreguntasDisponibles(){
+            api("getPreguntasDisponibles",{id_cuestionario: this.id_cuestionario}, 
             (data) => this.preguntas = data);
         },
-        quitarPregunta: function (pregunta) {
-          const resp = confirm(`¿En verdad deseas quitar la pregunta de este cuestionario?`);
+        agregarPregunta: function (pregunta) {
+          const resp = confirm(`¿Desea agregar esta pregunta al cuetionario ${this.cuestionario.nom_cuestionario}?`);
           if(resp){
-            api("deletePreguntaCuestionario", {
+            api("addPreguntaCuestionario", {
               "id_pregunta": pregunta.id_pregunta,
               "id_cuestionario": this.id_cuestionario
             },
             () => {
-                toastr.success('Pregunta quitada exitosamente');
+                toastr.success('Pregunta agregada exitosamente');
                this.preguntas = this.preguntas.filter((p) => p.id_pregunta !== pregunta.id_pregunta);
               }
             );
