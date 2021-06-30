@@ -97,6 +97,26 @@ class Consultas
         where cuestionario.id_cuestionario in (SELECT id_cuestionario from insertar_persona_cuestionario where id_persona = $id_alumno)");
     }
 
+    public function getCuestionariosPorAlumnoConEstatus($id_alumno){
+
+        //TODO: @Fix: After
+        $inscripciones = $this->db->array("SELECT * from insertar_persona_cuestionario where id_persona = $id_alumno");
+        
+
+        foreach ($inscripciones as &$inscripcion) {
+            $id_cuestionario = $inscripcion["id_cuestionario"];
+            $id_ins_per_cuest = $inscripcion["id_ins_per_cuest"];
+            $cuestionario = $this->db->array("SELECT cuestionario.*, categoria.nom_categoria from cuestionario natural join categoria
+                 where cuestionario.id_cuestionario = $id_cuestionario");
+            $inscripcion['cuestionario'] = $cuestionario;
+            $count = $this->db->row("SELECT count(*) as total from respuestas_per_cuest where id_ins_per_cuest = $id_ins_per_cuest")["total"];
+            $inscripcion['total'] = intval($count);
+            
+        }
+
+        return $inscripciones;
+    }   
+
     public function resultadoCuestionarioAlumno($id_alumno, $id_cuestionario){
         $preguntas = $this->db->array("SELECT * from pregunta where id_pregunta 
         in (select id_pregunta from cuest_pregunta where id_cuestionario = $id_cuestionario)");

@@ -4,18 +4,52 @@ include './consultas.php';
 include './helpers.php';
 include './sesion.php';
 
-validarTipoUsuario("normal");
+validarTipoUsuario('normal');
 
+$usuario = json_encode($_SESSION["user"]["usuario"]);
 ?>
 
 
-<?= headerLayout('Usuario normal') ?>
-
-  <div class="container mt-5">
-    <div class="d-flex flex-row justify-content-end">
-      <a type="button" class="btn btn-warning" href="logout.php" >Cerrar sesión</a>
+<?= headerLayout('Cuestionarios') ?>
+  <?= renderNav(array(), 'Cuestionarios') ?>
+  <div id="app" class="container mt-5 mb-5">
+    <h4>Cuestionarios - <b>{{usuario.nom_persona}}</b></h4>
+    <div class="row">
+      <div class="col-6" v-for="cuestionario in cuestionarios">
+        <div class="card mt-4">
+          <div class="card-body">
+            <h4 class="card-title">{{cuestionario.nom_cuestionario}}</h4>
+            <p class="card-text">
+              <button class="btn btn-success">Contestar</button>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <h4>Normal</h4>
   </div>
+  <script>
+  
+  var app = new Vue({
+      el: "#app",
+      data: {
+        cuestionarios: [],
+        usuario: JSON.parse('<?= $usuario ?>')
+      },
+      created: function(){
+        this.fethCuestionariosPorAlumno();
+      },
+      methods: {
+        fethCuestionariosPorAlumno: function(){
+          api("getCuestionariosAlumnoConEstatus", {id_alumno: this.usuario.id_persona}, (data) =>{
+            this.cuestionarios = data.map((item) => item.cuestionario);
+            console.log("Data", data);
+          });
+        },
+      }
+    });
+
+   
+
+  </script>
 <?= footerLayout() ?>
 <?php unset($_SESSION['alert']); ?> 

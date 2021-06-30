@@ -35,7 +35,7 @@
       return "
     <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
       <div class='container-fluid'>
-        <a class='navbar-brand' href='#'>Navbar</a>
+        <a class='navbar-brand' href='#'>Sistema Cuestionarios</a>
         <button class='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
           <span class='navbar-toggler-icon'></span>
         </button>
@@ -54,6 +54,7 @@
   $admin_nav_items = array(
     array( "title" => "Cuestionarios", "href" => "cuestionario_lista.php"),
     array( "title" => "Preguntas", "href" => "preguntas_lista.php"),
+    array( "title" => "Inscripción alumnos", "href" => "inscripcion_alumnos.php"),
     array( "title" => "Resultados", "href" => "resultados.php"),
   );
 
