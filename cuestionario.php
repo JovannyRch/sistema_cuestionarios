@@ -6,6 +6,7 @@ include './sesion.php';
 
 validarTipoUsuario('normal');
 
+
 $id_cuestionario = "";
 $usuario = json_encode($_SESSION["user"]["usuario"]);
 

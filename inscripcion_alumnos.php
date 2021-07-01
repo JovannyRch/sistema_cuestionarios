@@ -4,12 +4,16 @@ include './consultas.php';
 include './helpers.php';
 include './sesion.php';
 
-validarTipoUsuario('admin');
+$tipo = $_SESSION["user"]["tipo"];
+
+validarAdminProfe($tipo);
+
+
 ?>
 
 
-<?= headerLayout('Incripción de alumnos') ?>
-  <?= renderNav($admin_nav_items, 'Inscripción alumnos') ?>
+<?= headerLayout($tipo == "admin"? "Administrador": "Profesor") ?>
+  <?= renderNav($tipo == "admin"? $admin_nav_items: $profesor_nav_items, 'Inscripción alumnos') ?>
   <div id="app" class="container mt-2 pb-4 pt-4">
     <h4>Inscripción de alumnos</h4>
     <div class="form-group w-50 mt-3">

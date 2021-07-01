@@ -21,7 +21,7 @@ if (isset($_POST["email"]) && $_POST["password"]) {
         header("Location: cuestionario_lista.php");
       }
       else if($usuario["tipo"] == "profesor"){
-        header("Location: index_profesor.php");
+        header("Location: cuestionario_lista.php");
       }
       else{
         header("Location: index.php");

@@ -8,7 +8,7 @@ validarTipoUsuario('admin');
 ?>
 
 
-<?= headerLayout('Resultados') ?>
+<?= headerLayout('Administrador') ?>
   <?= renderNav($admin_nav_items, 'Resultados') ?>
   <div id="app" class="container mt-2 mb-5">
     <h4>Resultados</h4>

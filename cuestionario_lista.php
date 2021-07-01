@@ -3,13 +3,14 @@ include './layouts.php';
 include './consultas.php';
 include './helpers.php';
 include './sesion.php';
+$tipo = $_SESSION["user"]["tipo"];
 
-validarTipoUsuario('admin');
+validarAdminProfe($tipo);
 ?>
 
 
-<?= headerLayout('Administrador') ?>
-  <?= renderNav($admin_nav_items, 'Cuestionarios') ?>
+<?= headerLayout($tipo == "admin"? "Administrador": "Profesor") ?>
+  <?= renderNav($tipo == "admin"? $admin_nav_items: $profesor_nav_items, 'Cuestionarios') ?>
   <div id="app" class="container mt-2">
     <h4>Cuestionarios</h4>
     <div class="d-flex justify-content-end">

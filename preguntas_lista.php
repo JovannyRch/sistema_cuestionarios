@@ -4,12 +4,12 @@ include './consultas.php';
 include './helpers.php';
 include './sesion.php';
 
-validarTipoUsuario('admin');
+validarTipoUsuario('profesor');
 ?>
 
 
-<?= headerLayout('Administrador') ?>
-  <?= renderNav($admin_nav_items, 'Preguntas') ?>
+<?= headerLayout('Profesor') ?>
+  <?= renderNav($profesor_nav_items, 'Preguntas') ?>
   <div id="app" class="container mt-2">
     <h4>Preguntas</h4>
     <div class="d-flex justify-content-end">

@@ -4,7 +4,10 @@ include './consultas.php';
 include './helpers.php';
 include './sesion.php';
 
-validarTipoUsuario('admin');
+
+$tipo = $_SESSION["user"]["tipo"];
+
+validarAdminProfe($tipo);
 
 $id_cuestionario = "";
 
@@ -15,8 +18,8 @@ if(isset($_GET["id_cuestionario"])){
 ?>
 
 
-<?= headerLayout('Administrador') ?>
-  <?= renderNav($admin_nav_items, 'Cuestionarios') ?>
+<?= headerLayout($tipo == "admin"? "Administrador": "Profesor") ?>
+  <?= renderNav($tipo == "admin"? $admin_nav_items: $profesor_nav_items, 'Cuestionarios') ?>
   <div id="app" class="container mt-2">
     <h4>{{ edit? "Editar": "Agregar"}} Cuestionario</h4>
     <div class="w-50">

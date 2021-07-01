@@ -4,12 +4,15 @@ include './consultas.php';
 include './helpers.php';
 include './sesion.php';
 
-validarTipoUsuario('admin');
+$tipo = $_SESSION["user"]["tipo"];
+
+validarAdminProfe($tipo);
+
+
 ?>
 
-
-<?= headerLayout('Reportes') ?>
-  <?= renderNav($admin_nav_items, 'Reportes') ?>
+<?= headerLayout($tipo == "admin"? "Administrador": "Profesor") ?>
+  <?= renderNav($tipo == "admin"? $admin_nav_items: $profesor_nav_items, 'Reportes') ?>
   <div id="app" class="container mt-2 mb-5">
     <h4>Reportes</h4>
     <div class="row mt-5" v-if="page === 0">

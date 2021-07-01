@@ -4,7 +4,7 @@ include './consultas.php';
 include './helpers.php';
 include './sesion.php';
 
-validarTipoUsuario('admin');
+validarTipoUsuario('profesor');
 
 $id_pregunta = "";
 
@@ -15,8 +15,8 @@ if(isset($_GET["id_pregunta"])){
 ?>
 
 
-<?= headerLayout('Administrador') ?>
-  <?= renderNav($admin_nav_items, 'Cuestionarios') ?>
+<?= headerLayout('Profesor') ?>
+  <?= renderNav($profesor_nav_items, 'Preguntas') ?>
   <div id="app" class="container mt-2 pb-4 pt-4">
     <h4>{{ edit? "Editar": "Agregar"}} Pregunta</h4>
     <div class="w-50">
